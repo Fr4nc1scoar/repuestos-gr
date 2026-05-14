@@ -113,15 +113,28 @@ function buildCategoryList() {
 
     // "Todos" already in HTML – update count
     const allLi = categoryList.querySelector('[data-category="ALL"]');
-    allLi.querySelector('.cat-count').textContent = productsData.length;
+    if(allLi) allLi.querySelector('.cat-count').textContent = productsData.length;
+
+    const mobileSelect = document.getElementById('mobileCatSelect');
+    if (mobileSelect) {
+        mobileSelect.innerHTML = `<option value="ALL">🏪 Todos los Productos (${productsData.length})</option>`;
+    }
 
     allCats.forEach(cat => {
         const emoji = CAT_EMOJI[cat] || '📦';
+        const catName = cat.charAt(0)+cat.slice(1).toLowerCase();
+        
+        // Desktop List
         const li = document.createElement('li');
         li.className = 'cat-item';
         li.dataset.category = cat;
-        li.innerHTML = `<span class="cat-emoji">${emoji}</span>${cat.charAt(0)+cat.slice(1).toLowerCase()} <span class="cat-count">${counts[cat]}</span>`;
+        li.innerHTML = `<span class="cat-emoji">${emoji}</span>${catName} <span class="cat-count">${counts[cat]}</span>`;
         categoryList.appendChild(li);
+
+        // Mobile Select
+        if (mobileSelect) {
+            mobileSelect.innerHTML += `<option value="${cat}">${emoji} ${catName} (${counts[cat]})</option>`;
+        }
     });
 }
 
@@ -147,15 +160,34 @@ function bindEvents() {
         renderCatalog();
     });
 
-    // Category sidebar
+    // Category sidebar (Desktop)
     categoryList.addEventListener('click', e => {
         const li = e.target.closest('.cat-item');
         if (!li) return;
         state.category = li.dataset.category;
         categoryList.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
         li.classList.add('active');
+        
+        // Sync mobile select
+        const mobileSelect = document.getElementById('mobileCatSelect');
+        if (mobileSelect) mobileSelect.value = state.category;
+        
         renderCatalog();
     });
+
+    // Category select (Mobile)
+    const mobileSelect = document.getElementById('mobileCatSelect');
+    if (mobileSelect) {
+        mobileSelect.addEventListener('change', e => {
+            state.category = e.target.value;
+            // Sync desktop list
+            categoryList.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
+            const li = categoryList.querySelector(`[data-category="${state.category}"]`);
+            if (li) li.classList.add('active');
+            
+            renderCatalog();
+        });
+    }
 
     // No results clear
     if (clearFilters) clearFilters.addEventListener('click', () => {
@@ -165,6 +197,7 @@ function bindEvents() {
         clearSearch.classList.add('hidden');
         categoryList.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
         categoryList.querySelector('[data-category="ALL"]').classList.add('active');
+        if (mobileSelect) mobileSelect.value = 'ALL';
         renderCatalog();
     });
 
