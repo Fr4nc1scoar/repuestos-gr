@@ -888,22 +888,24 @@ button, select, input, textarea { font-family: inherit; }
 @media (max-width: 680px) {
     :root { --navbar-h: auto; }
     
-    .navbar { padding: 10px 0; height: auto; }
+    .navbar { padding: 12px 0; height: auto; }
     .nav-inner { 
-        flex-wrap: wrap; 
+        flex-wrap: nowrap; 
         gap: 12px; 
         height: auto; 
     }
-    .logo-wrap { flex: 1; }
-    .logo-wrap img { height: 40px; }
+    .logo-wrap { flex-shrink: 0; }
+    .logo-wrap img { height: 34px; }
+    
+    .cart-btn { display: none !important; }
     
     .search-wrap { 
-        order: 3; 
-        width: 100%; 
+        flex: 1; 
+        width: auto; 
         max-width: 100%; 
         margin-left: 0;
     }
-    .search-wrap input { font-size: .9rem; padding: 10px 36px 10px 42px; }
+    .search-wrap input { font-size: .9rem; padding: 10px 32px 10px 38px; }
 
     .hero { padding: 24px 0; }
     .hero-content { flex-direction: column; align-items: center; text-align: center; }
