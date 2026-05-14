@@ -854,15 +854,18 @@ button, select, input, textarea { font-family: inherit; }
         max-height: none;
         overflow: visible;
         padding: 14px 10px;
+        box-shadow: none;
+        border-bottom: 1px solid var(--border);
+        border-radius: 0;
     }
-    .sidebar-title { display: block; padding: 0 10px 10px; }
+    .sidebar-title { display: none; }
     .cat-list {
         display: flex;
         overflow-x: auto;
         overflow-y: visible;
         flex-wrap: nowrap;
         gap: 8px;
-        padding-bottom: 6px;
+        padding-bottom: 10px;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
     }
@@ -872,64 +875,99 @@ button, select, input, textarea { font-family: inherit; }
         border-radius: var(--radius-full);
         border: 1.5px solid var(--border);
         white-space: nowrap;
-        padding: 8px 14px;
+        padding: 8px 16px;
+        background: white;
     }
     .cat-item.active {
-        border-left: 1.5px solid var(--orange);
+        border: 1.5px solid var(--orange);
+        background: var(--orange);
+        color: white;
     }
     .cat-count { display: none; }
 }
 
 @media (max-width: 680px) {
-    :root { --navbar-h: 60px; }
+    :root { --navbar-h: auto; }
+    
+    .navbar { padding: 10px 0; height: auto; }
+    .nav-inner { 
+        flex-wrap: wrap; 
+        gap: 12px; 
+        height: auto; 
+    }
+    .logo-wrap { flex: 1; }
+    .logo-wrap img { height: 40px; }
+    
+    .search-wrap { 
+        order: 3; 
+        width: 100%; 
+        max-width: 100%; 
+        margin-left: 0;
+    }
+    .search-wrap input { font-size: .9rem; padding: 10px 36px 10px 42px; }
 
-    .nav-inner { gap: 8px; flex-wrap: nowrap; }
-    .logo-wrap img { height: 36px; }
-    .search-wrap input { font-size: .85rem; padding: 9px 36px 9px 38px; }
-
-    .hero { padding: 28px 0 24px; }
-    .hero-badge { font-size: .75rem; padding: 5px 12px; }
-    .hero-text h1 { font-size: 1.5rem; }
-    .hero-text p { font-size: .9rem; }
-    .hero-mascot { display: none; } /* hide mascot on small phones */
-    .hero-stats-row { gap: 8px; }
-    .hero-stat { padding: 10px 12px; min-width: 80px; }
+    .hero { padding: 24px 0; }
+    .hero-content { flex-direction: column; align-items: center; text-align: center; }
+    .hero-badge { margin-bottom: 12px; }
+    .hero-text h1 { font-size: 1.6rem; }
+    .hero-text p { font-size: .95rem; margin-bottom: 20px; }
+    .hero-mascot { display: none; }
+    
+    .hero-stats-row { 
+        width: 100%; 
+        display: grid; 
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 10px; 
+    }
+    .hero-stat { 
+        padding: 10px 6px; 
+        min-width: 0; 
+        align-items: center; 
+        text-align: center; 
+    }
     .stat-num { font-size: 1.2rem; }
-    .stat-label { font-size: .72rem; }
+    .stat-label { font-size: .7rem; }
 
     .catalog-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: 12px;
     }
+    .sort-row { width: 100%; justify-content: space-between; }
+    .sort-row select { flex: 1; margin-left: 8px; }
 
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }
 
-    .card-img-wrap { height: 130px; padding: 10px; }
-    .card-body { padding: 10px; }
-    .card-name { font-size: .82rem; -webkit-line-clamp: 3; }
-    .card-price { font-size: 1rem; }
-    .card-footer { flex-wrap: wrap; gap: 6px; }
-    .btn-add-cart { padding: 7px 10px; font-size: .78rem; width: 100%; justify-content: center; }
-    .cat-chip { font-size: .65rem; padding: 2px 7px; }
+    .card-img-wrap { height: 140px; padding: 10px; }
+    .card-body { padding: 12px 10px; }
+    .card-brand { font-size: .7rem; }
+    .card-name { font-size: .85rem; -webkit-line-clamp: 3; margin-bottom: 4px; }
+    .card-code { font-size: .75rem; margin-bottom: 10px; }
+    .card-price { font-size: 1.1rem; }
+    .card-footer { flex-direction: column; gap: 8px; align-items: stretch; }
+    .btn-add-cart { padding: 10px; font-size: .85rem; width: 100%; justify-content: center; }
+    .cat-chip { font-size: .65rem; padding: 3px 8px; top: 6px; left: 6px; }
 
     .cart-panel { max-width: 100%; }
-    .container { padding: 0 12px; }
-    .main-layout { padding-top: 20px; padding-bottom: 40px; }
+    .container { padding: 0 16px; }
+    .main-layout { padding-top: 16px; padding-bottom: 40px; }
 
-    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; text-align: center; }
+    .footer-logo { margin: 0 auto 14px; }
 }
 
 @media (max-width: 380px) {
     .products-grid { grid-template-columns: 1fr; }
-    .hero-text h1 { font-size: 1.3rem; }
+    .hero-stats-row { grid-template-columns: 1fr; }
+    .hero-stat { flex-direction: row; justify-content: space-between; padding: 12px 16px; }
+    .stat-label { font-size: .9rem; margin-top: 0; }
 }
 
 /* ===============================
-   FLOATING CART BAR (Urban Food style)
+   FLOATING CART BAR
 =============================== */
 .floating-cart {
     position: fixed;
@@ -1003,6 +1041,7 @@ button, select, input, textarea { font-family: inherit; }
     flex-direction: column;
     gap: 1px;
     flex: 1;
+    text-align: left;
 }
 
 .floating-cart-label {
