@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80">
+  <!-- GEAR: large orange gear on the left with snowflake inside -->
+  <g transform="translate(8,8)">
+    <!-- Gear outer ring with teeth -->
+    <circle cx="32" cy="32" r="28" fill="#F07026"/>
+    <!-- Gear teeth - 8 rectangular teeth -->
+    <rect x="28" y="0" width="8" height="9" rx="2" fill="#F07026"/>
+    <rect x="28" y="55" width="8" height="9" rx="2" fill="#F07026"/>
+    <rect x="0" y="28" width="9" height="8" rx="2" fill="#F07026"/>
+    <rect x="55" y="28" width="9" height="8" rx="2" fill="#F07026"/>
+    <!-- diagonal teeth -->
+    <rect x="7" y="7" width="7" height="7" rx="2" fill="#F07026" transform="rotate(45 10.5 10.5)"/>
+    <rect x="50" y="7" width="7" height="7" rx="2" fill="#F07026" transform="rotate(45 53.5 10.5)"/>
+    <rect x="7" y="50" width="7" height="7" rx="2" fill="#F07026" transform="rotate(45 10.5 53.5)"/>
+    <rect x="50" y="50" width="7" height="7" rx="2" fill="#F07026" transform="rotate(45 53.5 53.5)"/>
+    <!-- White inner gear circle (hole) -->
+    <circle cx="32" cy="32" r="20" fill="white"/>
+    <!-- Snowflake / asterisk inside - navy blue -->
+    <!-- Main cross -->
+    <line x1="32" y1="14" x2="32" y2="50" stroke="#1A2E4A" stroke-width="4" stroke-linecap="round"/>
+    <line x1="14" y1="32" x2="50" y2="32" stroke="#1A2E4A" stroke-width="4" stroke-linecap="round"/>
+    <!-- Diagonals -->
+    <line x1="19.5" y1="19.5" x2="44.5" y2="44.5" stroke="#1A2E4A" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="44.5" y1="19.5" x2="19.5" y2="44.5" stroke="#1A2E4A" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Snowflake end dots -->
+    <circle cx="32" cy="14" r="2.5" fill="#1A2E4A"/>
+    <circle cx="32" cy="50" r="2.5" fill="#1A2E4A"/>
+    <circle cx="14" cy="32" r="2.5" fill="#1A2E4A"/>
+    <circle cx="50" cy="32" r="2.5" fill="#1A2E4A"/>
+  </g>
+
+  <!-- TEXT: REPUESTOS -->
+  <text x="82" y="37" 
+        font-family="'Arial Black', 'Inter', Arial, sans-serif" 
+        font-weight="900" 
+        font-size="28" 
+        fill="#1A2E4A"
+        letter-spacing="-0.5">REPUESTOS</text>
+
+  <!-- TEXT: GR in orange, large bold -->
+  <text x="82" y="66" 
+        font-family="'Arial Black', 'Inter', Arial, sans-serif" 
+        font-weight="900" 
+        font-size="30" 
+        fill="#F07026"
+        letter-spacing="1">GR</text>
+
+  <!-- Small gear after "GR" -->
+  <g transform="translate(128,50)">
+    <circle cx="13" cy="13" r="11" fill="#F07026"/>
+    <!-- Small teeth -->
+    <rect x="10.5" y="0" width="5" height="4" rx="1" fill="#F07026"/>
+    <rect x="10.5" y="22" width="5" height="4" rx="1" fill="#F07026"/>
+    <rect x="0" y="10.5" width="4" height="5" rx="1" fill="#F07026"/>
+    <rect x="22" y="10.5" width="4" height="5" rx="1" fill="#F07026"/>
+    <!-- diag teeth -->
+    <rect x="3" y="3" width="4" height="4" rx="1" fill="#F07026" transform="rotate(45 5 5)"/>
+    <rect x="20" y="3" width="4" height="4" rx="1" fill="#F07026" transform="rotate(45 22 5)"/>
+    <rect x="3" y="20" width="4" height="4" rx="1" fill="#F07026" transform="rotate(45 5 22)"/>
+    <rect x="20" y="20" width="4" height="4" rx="1" fill="#F07026" transform="rotate(45 22 22)"/>
+    <!-- inner white -->
+    <circle cx="13" cy="13" r="7" fill="white"/>
+    <!-- snowflake mini -->
+    <line x1="13" y1="7" x2="13" y2="19" stroke="#1A2E4A" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="7" y1="13" x2="19" y2="13" stroke="#1A2E4A" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="9" y1="9" x2="17" y2="17" stroke="#1A2E4A" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="17" y1="9" x2="9" y2="17" stroke="#1A2E4A" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+</svg>
