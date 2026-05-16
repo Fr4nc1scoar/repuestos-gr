@@ -5,7 +5,7 @@
    - Checkout Delivery / Pick Up → Envío por WhatsApp
 ======================================================== */
 
-const WHATSAPP_NUMBER = "584120000000"; // ← Cambia este número
+const WHATSAPP_NUMBER = "584146088160"; // ← Cambia este número
 
 /* ── Emojis por categoría ──────────────────────────── */
 const CAT_EMOJI = {
@@ -48,7 +48,7 @@ let state = {
     search: '',
     sort: 'default',
     cart: {},          // { cartKey: { product, qty } }  cartKey = id|brand (unique per variant)
-    mode: 'delivery',  // 'delivery' | 'pickup'
+    mode: 'consult',   // Default to consult
 };
 
 /* ── Build unique cart key (handles same code / different brand) ── */
@@ -75,9 +75,7 @@ const cartEmpty      = $('cartEmpty');
 const cartFooter     = $('cartFooter');
 const cartTotal      = $('cartTotal');
 const btnDelivery    = $('btnDelivery');
-const btnPickup      = $('btnPickup');
-const deliveryFields = $('deliveryFields');
-const pickupFields   = $('pickupFields');
+const pickupFields   = null; // Removed
 const sendOrderBtn   = $('sendOrderBtn');
 const clearFilters   = $('clearFilters');
 const totalP1        = $('total-products');
@@ -206,9 +204,7 @@ function bindEvents() {
     closeCart.addEventListener('click', closeCartPanel);
     cartOverlay.addEventListener('click', closeCartPanel);
 
-    // Delivery / Pickup
-    btnDelivery.addEventListener('click', () => setMode('delivery'));
-    btnPickup.addEventListener('click', () => setMode('pickup'));
+    // Removed delivery/pickup toggles
 
     // Send order
     sendOrderBtn.addEventListener('click', sendOrder);
@@ -276,9 +272,9 @@ function renderCatalog() {
                 <h3 class="card-name">${p.name}</h3>
                 <span class="card-code">Ref: ${p.id}</span>
                 <div class="card-footer">
-                    <span class="card-price">${formatPrice(p.price)}</span>
+                    <span class="card-price">Consultar</span>
                     <button class="btn-add-cart ${inCart > 0 ? 'added' : ''}" data-id="${p.id}" data-brand="${p.brand}">
-                        ${inCart > 0 ? `✓ (${inCart})` : '+ Agregar'}
+                        ${inCart > 0 ? `✓ (${inCart})` : 'Consultar precio'}
                     </button>
                 </div>
             </div>
@@ -338,7 +334,6 @@ function deleteFromCart(key) {
 function updateCartUI() {
     const items = Object.values(state.cart);
     const totalQty = items.reduce((s, i) => s + i.qty, 0);
-    const totalPrice = items.reduce((s, i) => s + i.product.price * i.qty, 0);
 
     // Badge
     if (totalQty > 0) {
@@ -349,19 +344,19 @@ function updateCartUI() {
     }
 
     // Total
-    cartTotal.textContent = `$${totalPrice.toFixed(2)}`;
+    cartTotal.textContent = `A consultar`;
 
     // Floating cart bar update
-    updateFloatingCart(totalQty, totalPrice);
+    updateFloatingCart(totalQty);
 
     // Cart items panel
     renderCartItems(items, totalQty);
 }
 
-function updateFloatingCart(totalQty, totalPrice) {
+function updateFloatingCart(totalQty) {
     if (totalQty > 0) {
         floatingBadge.textContent = totalQty;
-        floatingTotal.textContent = `$${totalPrice.toFixed(2)}`;
+        floatingTotal.textContent = `Ver lista`;
         floatingCart.classList.add('visible');
     } else {
         floatingCart.classList.remove('visible');
@@ -399,7 +394,7 @@ function renderCartItems(items, totalQty) {
             <div class="cart-row-info">
                 <div class="cart-row-name">${p.name}</div>
                 <div class="cart-row-brand" style="font-size:.75rem;color:var(--text-muted);">${p.brand}</div>
-                <div class="cart-row-price">${p.price > 0 ? '$' + (p.price * qty).toFixed(2) : 'Consultar'}</div>
+                <div class="cart-row-price">A consultar</div>
             </div>
             <div class="qty-controls">
                 <button class="qty-btn remove-btn" data-action="remove" data-key="${key}">−</button>
@@ -438,58 +433,37 @@ function closeCartPanel() {
 
 /* ── Delivery / Pickup mode ───────────────────────── */
 function setMode(mode) {
-    state.mode = mode;
-    if (mode === 'delivery') {
-        btnDelivery.classList.add('active');
-        btnPickup.classList.remove('active');
-        deliveryFields.classList.remove('hidden');
-        pickupFields.classList.add('hidden');
-    } else {
-        btnPickup.classList.add('active');
-        btnDelivery.classList.remove('active');
-        pickupFields.classList.remove('hidden');
-        deliveryFields.classList.add('hidden');
-    }
+    // Mode toggle removed
 }
 
 /* ── Send Order via WhatsApp ─────────────────────── */
 function sendOrder() {
     const items = Object.values(state.cart);
     if (items.length === 0) {
-        alert('Tu carrito está vacío. Agrega al menos un producto antes de enviar.');
+        alert('Tu lista de consulta está vacía. Agrega al menos un producto.');
         return;
     }
 
-    let name = '';
-    let address = '';
-
-    if (state.mode === 'delivery') {
-        name = ($('customerName').value || '').trim();
-        address = ($('deliveryAddress').value || '').trim();
-        if (!name) { $('customerName').focus(); alert('Por favor ingresa tu nombre.'); return; }
-        if (!address) { $('deliveryAddress').focus(); alert('Por favor ingresa la dirección de entrega.'); return; }
-    } else {
-        name = ($('customerNamePickup').value || '').trim();
-        if (!name) { $('customerNamePickup').focus(); alert('Por favor ingresa tu nombre.'); return; }
+    const name = ($('customerName').value || '').trim();
+    if (!name) { 
+        $('customerName').focus(); 
+        alert('Por favor ingresa tu nombre para procesar la consulta.'); 
+        return; 
     }
 
-    const total = items.reduce((s, i) => s + i.product.price * i.qty, 0);
-    const modeLabel = state.mode === 'delivery' ? '🚚 Delivery' : '🏪 Pick Up';
-
-    let msg = `*🛒 Nuevo Pedido — Repuestos CR*\n`;
+    let msg = `*📋 Consulta de Precios — Repuestos CR*\n`;
     msg += `─────────────────────\n`;
     msg += `*Cliente:* ${name}\n`;
-    msg += `*Modalidad:* ${modeLabel}\n`;
-    if (state.mode === 'delivery') msg += `*Dirección:* ${address}\n`;
     msg += `─────────────────────\n`;
-    msg += `*PRODUCTOS:*\n`;
+    msg += `*PRODUCTOS A CONSULTAR:*\n`;
+    
     items.forEach(({ product: p, qty }) => {
-        const lineTotal = p.price > 0 ? `$${(p.price * qty).toFixed(2)}` : 'Consultar';
-        msg += `• (${qty}x) ${p.name} [${p.id}] → ${lineTotal}\n`;
+        // Solo Nombre y Marca, sin Referencia
+        msg += `• (${qty}x) ${p.name.toUpperCase()} [${p.brand.toUpperCase()}]\n`;
     });
+    
     msg += `─────────────────────\n`;
-    msg += total > 0 ? `*TOTAL: $${total.toFixed(2)}*\n` : `*TOTAL: A confirmar*\n`;
-    msg += `\n¡Gracias por tu pedido! 🙏`;
+    msg += `\nHola, me gustaría consultar el precio y disponibilidad de estos repuestos. ¡Gracias! 🙏`;
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
@@ -497,5 +471,5 @@ function sendOrder() {
 
 /* ── Helpers ──────────────────────────────────────── */
 function formatPrice(price) {
-    return price > 0 ? `$${price.toFixed(2)}` : 'Consultar';
+    return 'Consultar';
 }
